@@ -1,0 +1,282 @@
+﻿@{
+    ViewData["Title"] = "Öğrenci Listesi";
+
+    var authInsert = false;
+    var authUpdate = false;
+    var authDelete = false;
+    if (Helper.AuthRoleId == (int)EnumRole.Admin)
+    {
+        authInsert = true;
+        authUpdate = true;
+        authDelete = true;
+    }
+}
+
+<script>
+    $(() => {
+        function getToken() {
+            var token = '@Html.AntiForgeryToken()';
+            token = $(token).val();
+            return token;
+        }
+
+        DataSource = function () {
+            return new DevExpress.data.CustomStore({
+                key: "id",
+                insert: function (key) {
+                    insertStudent(key);
+                },
+                remove: function (key) {
+                    deleteStudent(key);
+                },
+                update: function (key, values) {
+                    console.log(key);
+                    var selectedRowData = masterGrid().getDataSource()._items.find(({ id }) => id === key);
+                    updateStudent(jQuery.extend(selectedRowData, values));
+                },
+                load(loadOptions) {
+                    return $.ajax({
+                        type: "POST",
+                        url: "/Student/GetAllStudent",
+                        data: { __RequestVerificationToken: getToken() },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response != null) {
+                                return response;
+                            }
+                        },
+                        failure: function (response) {
+                            DevExpress.ui.notify("Belirlenemeyen bir sorun oluştu", "warning", 3000);
+                            return null;
+                        },
+                        error: function (response) {
+                            DevExpress.ui.notify("Veriler çekilirken bir hata oluştu", "error", 3000);
+                            return null;
+                        }
+                    });
+                },
+            });
+        }
+        const popupContentTemplate = function (fName, lName, bDate, cDate) {
+            return $('<div>').append(
+                $(`<p><b>Ad           : </b><span>${fName}</span></p>`),
+                $(`<p><b>Soyad        : </b><span>${lName}</span></p>`),
+                $(`<p><b>Doğum Tarihi : </b><span>${bDate}</span></p>`),
+                $(`<p><b>Kayıt Tarihi : </b><span>${cDate}</span></p>`),
+            );
+        };
+
+        $('#gridContainer').dxDataGrid({
+            dataSource: new DevExpress.data.DataSource({
+                store: DataSource()
+            }),
+            width: "auto",
+            height: "auto",
+            columnAutoWidth: true,
+            allowColumnReordering: true,
+            searchPanel: { visible: true },
+            showRowLines: true,
+            rowAlternationEnabled: true,
+            columnHidingEnabled: true,
+            allowColumnResizing: true,
+            selection: { mode: 'single' },
+            hoverStateEnabled: true,
+            showBorders: true,
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            filterRow: {
+                applyFilter: "auto",
+                resetOperationText: "Reset",
+                showOperationChooser: true,
+                visible: true
+            },
+            columnChooser: { enabled: true, mode: "select" },
+            export: { fileName: 'Öğrenci Listesi', enabled: true },
+            columns: [
+                {
+                    type: 'buttons',
+                    showInColumnChooser: false,
+                    fixed: true,
+                    fixedPosition: "right",
+                    buttons: ["edit", "delete", {
+                        hint: 'Gözat',
+                        icon: 'card',
+                        onClick(e) {
+                            var rowData = e.row.data;
+                            popup().option({
+                                contentTemplate: () => popupContentTemplate(rowData.firstName, rowData.lastName, rowData.birthDate, rowData.createDate),
+                                title: rowData.id + " Numaralı Öğrenci Detay Bilgileri"
+                            });
+                            popup().show();
+                        },
+                    }],
+                    visible: true
+                },
+                {
+                    caption: 'Id',
+                    dataField: 'id',
+                    dataType: 'number',
+                    visible: false
+                },
+                {
+                    caption: 'Ad',
+                    dataField: 'firstName',
+                    dataType: 'string',
+                },
+                {
+                    caption: 'Soyad',
+                    dataField: 'lastName',
+                    dataType: 'string',
+                },
+                {
+                    caption: 'Doğum Tarihi',
+                    dataField: 'birthDate',
+                    dataType: 'date',
+                },
+                {
+                    caption: 'Yaratılma Tarihi',
+                    dataField: 'createDate',
+                    dataType: 'datetime',
+                },
+            ],
+            editing: {
+                allowAdding: @Html.Raw(authInsert.ToString().ToLower()),
+                allowUpdating: @Html.Raw(authUpdate.ToString().ToLower()),
+                allowDeleting: @Html.Raw(authDelete.ToString().ToLower()),
+                confirmDelete: true,
+                mode: "popup",
+                popup: {
+                    showTitle: true,
+                    title: "Öğrenci",
+                    height: "auto",
+                    width: "auto",
+                },
+                form: {
+                    colCount: 1,
+                    labelLocation: "left",
+                    items: [
+                        {
+                            dataField: "firstName",
+                            validationRules: [{ type: "required" }],
+                            editorType: "dxTextBox",
+                            label: { text: "Ad" },
+                        },
+                        {
+                            dataField: "lastName",
+                            validationRules: [{ type: "required" }],
+                            editorType: "dxTextBox",
+                            label: { text: "Soyad" },
+                        },
+                        {
+                            dataField: "birthDate",
+                            validationRules: [{ type: "required" }],
+                            editorType: "dxDateBox",
+                            label: { text: "Doğum Tarihi" },
+                        }
+                    ]
+                },
+                useIcons: true
+            },
+        });
+
+        $('#popup').dxPopup({
+            contentTemplate: popupContentTemplate,
+            width: 400,
+            height: 300,
+            container: '.dx-viewport',
+            showTitle: true,
+            title: 'Öğrenci',
+            visible: false,
+            dragEnabled: true,
+            hideOnOutsideClick: true,
+            showCloseButton: true,
+            position: {
+                at: 'center',
+                my: 'center',
+                collision: 'fit',
+            },
+            toolbarItems: [
+                {
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: {
+                        text: 'Close',
+                        onClick() {
+                            popup().hide();
+                        },
+                    },
+                }],
+        });
+
+
+
+
+        function insertStudent(student) {
+            $.ajax({
+                type: "POST",
+                url: "/Student/InsertStudent",
+                data: { __RequestVerificationToken: getToken(), student: student },
+                dataType: "json",
+                success: function (response) {
+                    if (response.isSuccess) {
+                        DevExpress.ui.notify(response.message, "success", 3000);
+                        refreshMasterGrid();
+                    }
+                    else
+                        DevExpress.ui.notify(response.message, "error", 3000);
+                }
+            });
+        }
+
+        function updateStudent(student) {
+            $.ajax({
+                type: "POST",
+                url: "/Student/UpdateStudent",
+                data: { __RequestVerificationToken: getToken(), student: student },
+                dataType: "json",
+                success: function (response) {
+                    if (response.isSuccess) {
+                        DevExpress.ui.notify(response.message, "success", 3000);
+                        refreshMasterGrid();
+                    }
+                    else
+                        DevExpress.ui.notify(response.message, "error", 3000);
+                },
+            });
+        }
+
+        function deleteStudent(id) {
+            $.ajax({
+                type: "POST",
+                url: "/Student/DeleteStudent",
+                data: { __RequestVerificationToken: getToken(), id: id },
+                dataType: "json",
+                success: function (response) {
+                    if (response.isSuccess) {
+                        DevExpress.ui.notify(response.message, "success", 3000);
+                        refreshMasterGrid();
+                    }
+                    else
+                        DevExpress.ui.notify(response.message, "error", 3000);
+                },
+            });
+        }
+
+        var masterGrid = function () {
+            return $('#gridContainer').dxDataGrid('instance');
+        };
+
+        var popup = function () {
+            return $('#popup').dxPopup('instance');
+        }
+
+        function refreshMasterGrid() {
+            masterGrid().refresh();
+        }
+    });
+
+</script>
+
+<div id="gridContainer"></div>
+<div id="popup"></div>

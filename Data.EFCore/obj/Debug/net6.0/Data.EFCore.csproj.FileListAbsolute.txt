@@ -1,0 +1,17 @@
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\bin\Debug\net6.0\Data.EFCore.deps.json
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\bin\Debug\net6.0\Data.EFCore.runtimeconfig.json
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\bin\Debug\net6.0\Data.EFCore.dll
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\bin\Debug\net6.0\Data.EFCore.pdb
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\bin\Debug\net6.0\Domain.dll
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\bin\Debug\net6.0\Domain.pdb
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\Data.EFCore.csproj.AssemblyReference.cache
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\Data.EFCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\Data.EFCore.AssemblyInfoInputs.cache
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\Data.EFCore.AssemblyInfo.cs
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\Data.EFCore.csproj.CoreCompileInputs.cache
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\Data.EFCore.csproj.CopyComplete
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\Data.EFCore.dll
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\refint\Data.EFCore.dll
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\Data.EFCore.pdb
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\Data.EFCore.genruntimeconfig.cache
+C:\Users\TCD\source\repos\KUSYS-Demo\Data.EFCore\obj\Debug\net6.0\ref\Data.EFCore.dll

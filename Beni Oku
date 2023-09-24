@@ -1,0 +1,7 @@
+Beni Oku
+
+PackageManager dan update-database çalıştır.
+KUSYS.Demo database yaratılacak. 
+
+NOT : ConnectionString DataSource kısmına çalışacak makineye göre güncellenmelidir.
+Tüm görevleri tamamladım. 

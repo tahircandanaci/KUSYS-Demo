@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+}
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/login.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>KUSYS-Demo</h2>
+            <form method="post">
+                <label for="username">Kullanıcı Adı</label>
+                <input type="text" name="Username" placeholder="Kullanıcı adınızı giriniz" required>
+
+                <label for="password">Şifre</label>
+                <input type="password" name="Password" placeholder="Şifrenizi giriniz" required>
+
+                <button type="submit">Giriş Yap</button>
+            </form>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success"><strong>@TempData["Success"]</strong></div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger"><strong>@TempData["Error"]</strong></div>
+            }
+        </div>
+    </div>
+    <script src="~/js/login.js"></script>
+</body>
+</html>
